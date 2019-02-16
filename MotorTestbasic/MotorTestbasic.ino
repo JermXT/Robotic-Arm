@@ -11,14 +11,14 @@
 // Function : step . function: to control the direction of the stepper motor , the number of steps .
 // Parameters : dir direction control , dirPin corresponding stepper motor DIR pin , stepperPin corresponding stepper motor " step " pin , Step number of step of no return value.
 */
+
+//for now, lets arbitrarily define counter-clockwise as true (and positive) and clockwise as false (and negative)
 boolean x_tf;
 boolean y_tf;
 boolean z_tf;
-uint8_t prompted =0;
 
 void step (boolean dir, byte dirPin, byte stepperPin, int steps)
 {
-    
     digitalWrite (dirPin, dir);
     delay (50);
     for (int i = 0; i <steps; i ++) 
@@ -28,7 +28,6 @@ void step (boolean dir, byte dirPin, byte stepperPin, int steps)
         digitalWrite (stepperPin, LOW);
         delayMicroseconds (800);
     }
-    
 }
 /*
 void arraySubtraction(){
@@ -63,16 +62,18 @@ void loop () {
        bytes_read++;
     }
   }
-  if(state[0]>100){
-    state[0]-=100;
+  //convert angle to steps by multiplying by 5 and dividing by 9
+  
+  if(state[0]<0){
+    state[0]= -state[0];
     x_tf=false;
   } 
-  if(state[1]>100){
-    state[1]-=100;
+  if(state[1]<0){
+    state[1]= -state[1];
     y_tf=false;
   } 
-  if(state[2]>100){
-    state[2]-=100;
+  if(state[2]<0){
+    state[2]= -state[2];
     z_tf=false;
   } 
   Serial.print(state[0]);
@@ -81,7 +82,7 @@ void loop () {
   Serial.print(" ");
   Serial.print(state[2]);
   Serial.println(" ");
- step(x_tf, X_DIR, X_STP, state[0]);
+  step(x_tf, X_DIR, X_STP, state[0]);
   step(y_tf, Y_DIR, Y_STP, state[1]);
   step(z_tf, Z_DIR, Z_STP, state[2]);
    
@@ -113,4 +114,3 @@ void loop () {
   
    //delay(2000);
 } 
-
